@@ -70,4 +70,21 @@ public class Server {
     public AuthService getAuthService() {
         return authService;
     }
+
+    public void userMsg(ClientHandler sender, String receiver, String msg) {
+        String message = String.format("[ %s ] to [ %s ]: %s", sender.getNickname(), receiver, msg);
+        boolean fl = false;
+        for (ClientHandler c : clients) {
+            if (c.getNickname().equals(receiver)) {
+                c.sendMsg(message);
+                if (!c.equals(sender)) {
+                    sender.sendMsg(message);
+                }
+                fl = true;
+            }
+        }
+        if (!fl) {
+            sender.sendMsg("user doesn't exist: " + receiver);
+        }
+    }
 }

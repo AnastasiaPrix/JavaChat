@@ -61,8 +61,16 @@ public class ClientHandler {
                             out.writeUTF(Command.END);
                             break;
                         }
-
-                        server.broadcastMsg(this, str);
+                        if (str.startsWith(Command.USER_MSG)) {
+                            String[] token = str.split("\\s", 3);
+                            if (token.length < 3) {
+                                continue;
+                            }
+                            server.userMsg(this, token[1], token[2]);
+                        }
+                        else {
+                            server.broadcastMsg(this, str);
+                        }
                     }
                 } catch (RuntimeException e) {
                     System.out.println(e.getMessage());
